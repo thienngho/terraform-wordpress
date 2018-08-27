@@ -1,0 +1,22 @@
+---
+- name: Add docker repo
+  apt_repository:
+    repo="deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main"
+    state=present
+
+- name: Import the Docker repository key
+  apt_key:
+    keyserver="hkp://p80.pool.sks-keyservers.net:80"
+    state=present
+    id="2C52609D"
+
+- name: Install Docker package
+  apt:
+    name=docker-engine
+    update_cache=yes
+
+- name: Add ubuntu to docker group
+  user: 
+    name: ubuntu
+    groups: docker
+    append: yes

@@ -1,0 +1,19 @@
+---
+- hosts: all
+  remote_user: ubuntu
+  gather_facts: False
+  become: yes
+
+  pre_tasks: #Ubuntu 16.04 default is shipped with Python3 but Ansible doesn't support well
+  - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    register: output
+    changed_when: output.stdout != ""
+  - name: Gathering Facts
+    setup:
+
+  roles:
+    - { role: common,  tags: common }
+    - { role: docker,  tags: docker }
+    - { role: deploy,  tags: deploy }
+    - { role: netdata, tags: netdata }
+    - { role: nginx,   tags: nginx  }

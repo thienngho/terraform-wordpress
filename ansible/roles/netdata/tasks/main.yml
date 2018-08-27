@@ -1,0 +1,6 @@
+---
+- name: Add netdata APT repository
+  apt_repository: repo='ppa:phusion.nl/misc' update_cache=yes
+
+- name: Install netdata
+  apt: name=netdata state=present

@@ -1,0 +1,17 @@
+---
+- name: Add nginx APT repository
+  apt_repository: repo='ppa:nginx/stable' update_cache=yes
+
+- name: Install nginx
+  apt: name=nginx state=present
+
+- name: Remove default nginx config
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: Copy nginx config
+  copy: src=config.conf dest=/etc/nginx/sites-available/config.conf
+  notify: restart nginx
+
+- name: Add nginx config to sites-enabled
+  file: src=/etc/nginx/sites-available/config.conf dest=/etc/nginx/sites-enabled/config.conf state=link
+  notify: restart nginx
